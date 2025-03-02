@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
 from .models import Book, Library
 from django.views.generic import DetailView
+from django.contrib.auth.decorators import permission_required
 
 
 # Create your views here.
