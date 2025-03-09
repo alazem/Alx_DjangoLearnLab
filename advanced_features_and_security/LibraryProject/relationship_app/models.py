@@ -1,5 +1,7 @@
 from django.db import models
-
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 class Author(models.Model):
     name = models.CharField(max_length= 200)
     
@@ -20,3 +22,16 @@ class Librarian(models.Model):
     library = models.OneToOneField(Library, on_delete=models.CASCADE, related_name = "librarian")
     def __str__(self):
         return self.name
+class UserProfile(models.Model):
+    USER_CHOICES = [
+        ('Admin' , 'Admin'),
+        ('Librarian' , 'Librarian'),
+        ('Member' , 'Member'),
+    ]
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    role = models.CharField(max_length=15,choices=USER_CHOICES,default='MB')
+    @receiver(post_save, sender=User)
+    def create_user_profile(sender, instance, created, **kwargs):
+        if created:
+            UserProfile.objects.create(user=instance)
+        instance.userprofile.save()
