@@ -37,10 +37,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
+    'rest_framework', # Enables Django REST Framework
     'api',
+    'rest_framework.authtoken', # Enables Token Authentication
     
 ]
+# Configure REST framework authentication settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication', # Use token authentication
+        'rest_framework.authentication.SessionAuthentication',  # Allows session-based auth (for browsable API)
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',  # Requires authentication for all API endpoints by default
+    ],
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
