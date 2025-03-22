@@ -5,7 +5,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Book
 from .serializers import BookSerializer
-from rest_framework import DjangoFilterBackend
+from django_filters.rest_framework import DjangoFilterBackend
+from django_filters import rest_framework as filters
 
 # Custom Create View with Validation
 class CreateView(generics.CreateAPIView): 
