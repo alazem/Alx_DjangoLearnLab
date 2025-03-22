@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, filters
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Book
@@ -57,12 +57,14 @@ class ListView(generics.ListAPIView):
     serializer_class = BookSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['title']  # Allows filtering books by title
+    permission_classes = [IsAuthenticatedOrReadOnly]  # Only authenticated users can create
 
 # Custom Retrieve View
 class DetailView(generics.RetrieveAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     lookup_field = 'pk'
+    permission_classes = [IsAuthenticatedOrReadOnly]  # Only authenticated users can view
 
 # Custom Delete View (Only Authenticated Users)
 class DeleteView(generics.DestroyAPIView):
