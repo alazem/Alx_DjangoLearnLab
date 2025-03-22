@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, permissions, filters
+from rest_framework import generics, filters
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Book
@@ -14,7 +15,7 @@ class CreateView(generics.CreateAPIView):
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]  # Only authenticated users can create
+    permission_classes = [IsAuthenticated]  # Only authenticated users can create
 
     def perform_create(self, serializer):
         # Additional validation: Ensure title is unique
@@ -27,7 +28,7 @@ class CreateView(generics.CreateAPIView):
 class UpdateView(generics.UpdateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]  # Only authenticated users can update
+    permission_classes = [IsAuthenticated]  # Only authenticated users can update
     lookup_field = 'pk'
 
     def update(self, request, *args, **kwargs):
@@ -67,5 +68,5 @@ class DetailView(generics.RetrieveAPIView):
 class DeleteView(generics.DestroyAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]  # Only authenticated users can delete
+    permission_classes = [IsAuthenticated]  # Only authenticated users can delete
     lookup_field = 'pk'
