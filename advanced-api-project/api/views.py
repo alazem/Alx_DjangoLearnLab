@@ -6,7 +6,7 @@ from .models import Book
 from .serializers import BookSerializer
 
 # Custom Create View with Validation
-class CustomBookCreate(generics.CreateAPIView): 
+class CreateView(generics.CreateAPIView): 
     """
     API endpoint to create a new book.
     - Authentication required.
@@ -24,7 +24,7 @@ class CustomBookCreate(generics.CreateAPIView):
         serializer.save()  # Save the book if valid
 
 # Custom Update View with Validation and Error Handling
-class CustomBookUpdate(generics.UpdateAPIView):
+class UpdateView(generics.UpdateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [permissions.IsAuthenticated]  # Only authenticated users can update
@@ -45,7 +45,7 @@ class CustomBookUpdate(generics.UpdateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # Custom List View with Filtering
-class CustomBookList(generics.ListAPIView):
+class ListView(generics.ListAPIView):
     
     """
     API endpoint to list all books.
@@ -58,13 +58,13 @@ class CustomBookList(generics.ListAPIView):
     search_fields = ['title']  # Allows filtering books by title
 
 # Custom Retrieve View
-class CustomBookDetail(generics.RetrieveAPIView):
+class DetailView(generics.RetrieveAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     lookup_field = 'pk'
 
 # Custom Delete View (Only Authenticated Users)
-class CustomBookDelete(generics.DestroyAPIView):
+class DeleteView(generics.DestroyAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [permissions.IsAuthenticated]  # Only authenticated users can delete
