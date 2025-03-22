@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Book
 from .serializers import BookSerializer
+from rest_framework import DjangoFilterBackend
 
 # Custom Create View with Validation
 class CreateView(generics.CreateAPIView): 
@@ -56,15 +57,23 @@ class ListView(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['title']  # Allows filtering books by title
-    permission_classes = [IsAuthenticatedOrReadOnly]  # Only authenticated users can create
+    permission_classes = [IsAuthenticatedOrReadOnly]  # Only authenticated users can list
+    
+     # Add filtering, searching, and ordering backends
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+
+    # Configure fields for filtering, searching, and ordering
+    filterset_fields = ['title', 'author__name', 'publication_year']  # Filter by title, author's name, and year
+    search_fields = ['title', 'author__name']  # Search by title or author's name
+    ordering_fields = ['title', 'publication_year']  # Order by title or year
+    ordering = ['title']  # Default ordering by title
 
 # Custom Retrieve View
 class DetailView(generics.RetrieveAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     lookup_field = 'pk'
-    permission_classes = [IsAuthenticatedOrReadOnly]  # Only authenticated users can view
+    permission_classes = [IsAuthenticatedOrReadOnly]  # Only unauthenticated users can view
 
 # Custom Delete View (Only Authenticated Users)
 class DeleteView(generics.DestroyAPIView):
